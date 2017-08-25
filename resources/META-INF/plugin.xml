@@ -1,0 +1,40 @@
+<idea-plugin>
+  <id>com.SonarBay.WatchDocker</id>
+  <name>Watch DockerFiles for vulnerabilities</name>
+  <version>1.0</version>
+  <vendor email="support@sonarbay.com" url="http://www.sonarbay.com">SonarBay</vendor>
+
+  <description><![CDATA[
+      Watches your Dockerfiles for usage of vulnerable images.<br>
+      <em>Awsome</em>
+    ]]></description>
+
+  <change-notes><![CDATA[
+      Add change notes here.<br>
+      <em>most HTML tags may be used</em>
+    ]]>
+  </change-notes>
+
+  <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/build_number_ranges.html for description -->
+  <idea-version since-build="145.0"/>
+
+  <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/plugin_compatibility.html
+       on how to target different products -->
+  <!-- uncomment to enable plugin in all products
+  <depends>com.intellij.modules.lang</depends>
+  -->
+
+  <extensions defaultExtensionNs="com.intellij">
+    <fileTypeFactory implementation="com.sonarbay.plugin.DockerTypeFactory" />
+    <lang.parserDefinition language="Docker" implementationClass="com.sonarbay.plugin.DockerParserDefinition" />
+    <lang.syntaxHighlighterFactory key="Docker" implementationClass="com.sonarbay.plugin.DockerHighlightFactory" />
+    <annotator language="Docker" implementationClass="com.sonarbay.plugin.DockerAnnotator" />
+  </extensions>
+
+  <actions>
+    <!-- Add your actions here -->
+  </actions>
+
+  <module-components>
+  </module-components>
+</idea-plugin>

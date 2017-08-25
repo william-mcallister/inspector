@@ -1,0 +1,22 @@
+{
+    parserClass = "com.sonarbay.plugin.parser.DockerParser"
+
+    extends="com.intellij.extapi.psi.ASTWrapperPsiElement"
+
+      psiClassPrefix="Dockerfile"
+      psiImplClassSuffix="Impl"
+      psiPackage="com.sonarbay.plugin.psi"
+      psiImplPackage="com.sonarbay.plugin.psi.impl"
+
+      elementTypeHolderClass="com.sonarbay.plugin.psi.DockerTypes"
+      elementTypeClass="com.sonarbay.plugin.psi.DockerElementType"
+      tokenTypeClass="com.sonarbay.plugin.psi.DockerTokenType"
+
+      psiImplUtilClass="com.sonarbay.plugin.psi.impl.DockerPsiImplUtils"
+}
+
+dockerFile ::= item_*
+
+private item_ ::= (property|COMMENT|CRLF)
+
+property ::= (KEY? SEPARATOR VALUE?) | KEY {methods=[getKey getValue]}
