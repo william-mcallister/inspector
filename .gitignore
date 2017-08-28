@@ -29,6 +29,7 @@ cmake-build-debug/
 *.iws
 
 ## Plugin-specific files:
+gen/
 
 # IntelliJ
 out/
