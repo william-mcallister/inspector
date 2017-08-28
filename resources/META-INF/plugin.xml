@@ -29,6 +29,7 @@
     <lang.parserDefinition language="Docker" implementationClass="com.sonarbay.plugin.DockerParserDefinition" />
     <lang.syntaxHighlighterFactory key="Docker" implementationClass="com.sonarbay.plugin.DockerHighlightFactory" />
     <annotator language="Docker" implementationClass="com.sonarbay.plugin.DockerAnnotator" />
+    <codeInsight.lineMarkerProvider language="Docker" implementationClass="com.sonarbay.plugin.DockerLineMarker" />
   </extensions>
 
   <actions>

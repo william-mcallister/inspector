@@ -9,6 +9,10 @@ import com.intellij.openapi.util.TextRange
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiLiteralExpression
 import com.sonarbay.plugin.psi.DockerfileProperty
+import com.sun.javafx.scene.CameraHelper.project
+import com.intellij.openapi.application.ApplicationManager
+
+
 
 /**
  * Created by sh4d0wz on 8/24/17.
@@ -29,6 +33,8 @@ class DockerAnnotator : Annotator {
                 // start out with a warning until we get back some scan results.
                 var annotation: Annotation = holder.createWarningAnnotation(range, "Pending security scan for $imageName container")
                 annotation.textAttributes = DefaultLanguageHighlighterColors.LINE_COMMENT
+
+                ApplicationManager.getApplication().executeOnPooledThread { ApplicationManager.getApplication().runReadAction(DockerScanContainer(element)) }
             } else {
                 val range: TextRange = TextRange(element.nextSibling.nextSibling.textRange.startOffset, element.nextSibling.nextSibling.textRange.startOffset)
                 holder.createErrorAnnotation(range, "Unable to perform scan for $imageName")
