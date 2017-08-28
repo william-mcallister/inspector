@@ -21,6 +21,7 @@ FIRST_VALUE_CHARACTER=[^n\f\\] | "\\"{CRLF} | "\\"
 VALUE_CHARACTER=[^\n\f\\] | "\\"{CRLF} | "\\"
 SEPARATOR=[" "]
 KEY_CHARACTER=[^\ \n\t\f\\] | "\\ "
+END_OF_LINE_COMMENT=("#"|"!")[^\r\n]*
 
 %state WAITING_VALUE
 
@@ -28,6 +29,7 @@ KEY_CHARACTER=[^\ \n\t\f\\] | "\\ "
 
 <YYINITIAL> {KEY_CHARACTER}+                                { yybegin(YYINITIAL); return DockerTypes.KEY; }
 <YYINITIAL> {SEPARATOR}                                     { yybegin(WAITING_VALUE); return DockerTypes.SEPARATOR; }
+<YYINITIAL> {END_OF_LINE_COMMENT}                           { yybegin(YYINITIAL); return DockerTypes.COMMENT; }
 <WAITING_VALUE> {CRLF}({CRLF}|{WHITE_SPACE})+               { yybegin(YYINITIAL); return TokenType.WHITE_SPACE; }
 <WAITING_VALUE> {WHITE_SPACE}+                              { yybegin(WAITING_VALUE); return TokenType.WHITE_SPACE; }
 <WAITING_VALUE> {FIRST_VALUE_CHARACTER}{VALUE_CHARACTER}*   { yybegin(YYINITIAL); return DockerTypes.VALUE; }

@@ -16,26 +16,23 @@ import com.sonarbay.plugin.psi.DockerfileProperty
 class DockerAnnotator : Annotator {
 
     override fun annotate(element: PsiElement, holder: AnnotationHolder) {
-        if (element is PsiLiteralExpression) {
-            val literalExpression: PsiLiteralExpression = element as PsiLiteralExpression
-            var value: String = if (literalExpression.value is String) literalExpression.value as String else null as String
 
-            if (value != null && value.startsWith("FROM")) {
-                val project: Project = element.project
-                val key: String = value.substring(4);
-                val properties: List<DockerfileProperty> = DockerUtil.findProperties(project, key) as List<DockerfileProperty>
+        if (element.text.equals("FROM")) {
+            val imageName: String = if (element.nextSibling.nextSibling.text is String) element.nextSibling.nextSibling.text as String else null as String
+            val properties: List<DockerfileProperty> = DockerUtil.findProperties(element.project, element.text) as List<DockerfileProperty>
 
-                if (properties.size == 1) {
-                    val range: TextRange = TextRange(element.textRange.startOffset + 4, element.textRange.startOffset + 4)
-                    var annotation: Annotation = holder.createInfoAnnotation(range, null)
-                    annotation.textAttributes = DefaultLanguageHighlighterColors.LINE_COMMENT
-                } else if (properties.size == 0) {
-                    val range: TextRange = TextRange(element.textRange.startOffset + 4, element.textRange.startOffset + 5)
 
-                    holder.createErrorAnnotation(range, "Unresolved Property")//.registerFix(CreatePropertyQuickFix(key))
-                }
+            // TODO: need to handle error cases (no value etc...)
+            if (properties.size == 1) {
+                val range: TextRange = TextRange(element.textRange.startOffset + 4, element.textRange.startOffset + 4)
+
+                // start out with a warning until we get back some scan results.
+                var annotation: Annotation = holder.createWarningAnnotation(range, "Pending security scan for $imageName container")
+                annotation.textAttributes = DefaultLanguageHighlighterColors.LINE_COMMENT
+            } else {
+                val range: TextRange = TextRange(element.nextSibling.nextSibling.textRange.startOffset, element.nextSibling.nextSibling.textRange.startOffset)
+                holder.createErrorAnnotation(range, "Unable to perform scan for $imageName")
             }
-
         }
     }
 }
