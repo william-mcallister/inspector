@@ -10,5 +10,7 @@ class DockerScanContainer (element: PsiElement): Runnable {
 
     override fun run() {
         println("thread dispatched...")
+        Thread.sleep(10000)
+        println ("thread complete...")
     }
 }
